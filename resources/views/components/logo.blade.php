@@ -1,0 +1,1 @@
+<img src="/logo/rectangle.png" alt="Logo" width="200"/>
