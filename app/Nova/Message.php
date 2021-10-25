@@ -75,7 +75,8 @@ class Message extends Resource
             Textarea::make('Message')
                 ->required(),
 
-            Boolean::make('Read at'),
+            Boolean::make('Read at')
+                ->exceptOnForms(),
 
         ];
     }
