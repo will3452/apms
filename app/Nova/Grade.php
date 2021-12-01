@@ -86,7 +86,8 @@ class Grade extends Resource
             Number::make('Grade', 'value')
                 ->required(),
 
-            Text::make('Remark'),
+            Text::make('Remark')
+                ->exceptOnForms(),
 
         ];
     }
