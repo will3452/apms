@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -103,4 +104,27 @@ class User extends Authenticatable
         return $this->hasMany(Certificate::class);
     }
 
+    public function getLatestGradesAttribute()
+    {
+        return $this->grades()->latest()->get()->groupBy('year')->first()->groupBy('subject_id');
+    }
+
+    public function getLatestGradesAverageAttribute()
+    {
+        $sum = 0;
+        $count = 0;
+        $grades = $this->grades()->latest()->get()->groupBy('year')->first();
+        foreach ($grades as $grade) {
+            $sum += $grade->value;
+            $count++;
+        }
+
+        return number_format($sum / $count, 2);
+    }
+
+    public function isPresent($date)
+    {
+        $attendancesId = $this->attendances->pluck('id');
+        return Attendance::whereIn('id', $attendancesId->toArray())->whereDate('created_at', $date)->count();
+    }
 }

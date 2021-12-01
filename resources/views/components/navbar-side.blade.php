@@ -12,8 +12,8 @@
       </div>
       <div class="sidebar-wrapper" style="background:#fff;">
         <ul class="nav">
-          <x-nav-item link="{{ url('home') }}" icon="face">
-            Profile
+          <x-nav-item link="{{ url('home') }}" icon="dashboard">
+            Dashboard
           </x-nav-item>
 
           @if (auth()->user()->type == 'student')
@@ -33,7 +33,7 @@
                 My Certificates
               </x-nav-item>
           @endif
-          
+
           <x-nav-item link="{{ url('announcement') }}" icon="campaign">
             Announcements
           </x-nav-item>
@@ -45,7 +45,7 @@
           <x-nav-item link="{{ url('write-message') }}" icon="create">
             Write Message
           </x-nav-item>
-          
+
           <x-nav-item link="{{ url('recognitions') }}" icon="emoji_events">
             Recognitions
           </x-nav-item>
