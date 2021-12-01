@@ -11,6 +11,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecognitionController;
 use App\Http\Controllers\ScheduleController;
+use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,4 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::get('user-profile/{user}', [ProfileController::class, 'show']);
 
     Route::get('certificates', [CertificateController::class, 'index']);
+});
+
+Route::get('/absents', function () {
+    $attendances = Attendance::whereDate('created_at', today())->get();
+    foreach ($attendances as $attendance) {
+        $attendance->sendAbsentReport();
+    }
 });

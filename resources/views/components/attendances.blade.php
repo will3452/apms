@@ -52,7 +52,6 @@
 
         .present {
             background:#19CBB1;
-
         }
         .not-yet {
             background:#fff !important;

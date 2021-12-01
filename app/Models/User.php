@@ -106,14 +106,25 @@ class User extends Authenticatable
 
     public function getLatestGradesAttribute()
     {
-        return $this->grades()->latest()->get()->groupBy('year')->first()->groupBy('subject_id');
+        $grades = $this->grades()->latest()->get();
+        if (!count($grades)) {
+            return [];
+        }
+        return $grades->groupBy('year')->first()->groupBy('subject_id');
     }
 
     public function getLatestGradesAverageAttribute()
     {
         $sum = 0;
         $count = 0;
-        $grades = $this->grades()->latest()->get()->groupBy('year')->first();
+        $grades = $this->grades()->latest()->get();
+        if (!count($grades)) {
+            return;
+        }
+        $grades = $grades->groupBy('year')->first();
+        if (!count($grades)) {
+            return;
+        }
         foreach ($grades as $grade) {
             $sum += $grade->value;
             $count++;
