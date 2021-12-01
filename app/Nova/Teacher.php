@@ -63,7 +63,7 @@ class Teacher extends Resource
             Text::make('Contact No.', 'contact_no')
                 ->required(),
 
-            Text::make('Education')
+            Text::make('Subject', 'education')
                 ->help('Filipino, Math, English, Science, and etc.'),
 
             Image::make('Picture'),

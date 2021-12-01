@@ -10,6 +10,10 @@ class Year extends Resource
 {
     public static $group = "Data Management";
 
+    public static function label()
+    {
+        return "Year level";
+    }
     /**
      * The model the resource corresponds to.
      *
