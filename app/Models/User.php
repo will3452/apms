@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function students()
     {
-        return $this->hasMany(Student::class, 'guardian_id');
+        return $this->hasMany(User::class, 'guardian_id');
     }
 
     public function grades()
@@ -126,5 +126,20 @@ class User extends Authenticatable
     {
         $attendancesId = $this->attendances->pluck('id');
         return Attendance::whereIn('id', $attendancesId->toArray())->whereDate('created_at', $date)->count();
+    }
+
+    public function classrooms()
+    {
+        return $this->belongsToMany(ClassRoom::class);
+    }
+
+    public function getClassRoomNameAttribute()
+    {
+        $data = $this->classrooms()->get()->pluck('name')->toArray();
+        if (empty($data)) {
+            return 'N/a';
+        }
+
+        return implode(', ', $data);
     }
 }

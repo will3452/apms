@@ -12,20 +12,6 @@ class Student extends User
 
     protected $guard_name = 'web';
 
-    public function classrooms()
-    {
-        return $this->belongsToMany(ClassRoom::class);
-    }
-
-    public function getClassRoomNameAttribute()
-    {
-        $data = $this->classrooms()->get()->pluck('name')->toArray();
-        if (empty($data)) {
-            return 'N/a';
-        }
-
-        return implode(', ', $data);
-    }
 
     protected static function booted()
     {
@@ -33,5 +19,4 @@ class Student extends User
             $builder->where('type', 'student');
         });
     }
-
 }

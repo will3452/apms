@@ -6,97 +6,32 @@
                 @if (auth()->user()->type == 'student')
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <div>Latest Grades</div>
-                                <div>
-                                    Total Average: {{auth()->user()->latest_grades_average}}
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="grades"></canvas>
-                            </div>
-                        </div>
+                        <x-grades :user="auth()->user()"></x-grades>
                     </div>
-                    <script>
 
-
-                        const labels = [
-                            '1',
-                            '2',
-                            '3',
-                            '4',
-                            ];
-                            const data = {
-                            labels: labels,
-                            datasets: [
-                                @foreach(auth()->user()->latest_grades as $key=>$items)
-                                {
-                                    label: `{{\App\Models\Subject::find($key)->name}}`,
-                                    backgroundColor: '#{{dechex(rand(0,10000000))}}',
-                                    borderColor: '#{{dechex(rand(0,10000000))}}',
-                                    data: [
-                                        @foreach($items as $item)
-                                            {{$item->value}},
-                                        @endforeach
-                                    ],
-                                },
-                                @endforeach
-                            ]
-                            };
-
-                            const config = {
-                            type: 'bar',
-                            data: data,
-                            options: {}
-                        };
-                        const myChart = new Chart(
-                                document.getElementById('grades'),
-                                config
-                            );
-                    </script>
                     <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                Attendances
-                            </div>
-                            <div class="card-body">
-                                @php
-                                $dates = collect();
-                                $date = now()->format('F Y');//Current Month Year
-                                while (strtotime($date) <= strtotime(date('Y-m') . '-' . date('t', strtotime($date)))) {
-                                        if(in_array(date('l', strtotime($date)), ['Sunday', 'Saturday'])) {
-                                            $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));//Adds 1 day onto current date
-                                            continue;
-                                        }
-                                        $date = date("Y-m-d", strtotime($date));
-                                        $dates->push($date);
-                                        $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));//Adds 1 day onto current date
-                                }
-                                $counting = 0;
-                            @endphp
-                            <style>
-                                .cell {
-                                    padding:1px;margin:1px;
-                                    background:#D76C7E;
-                                }
-
-                                .present {
-                                    background:#19CBB1;
-                                }
-                            </style>
-                            @foreach ($dates as $key=>$date)
-                                @if ($key % 5 == 0)
-                                    <br>
-                                @endif
-                                <span class="cell {{!auth()->user()->isPresent($date) ? :'present' }}">
-                                    {{$date}}
-                                </span>
-                            @endforeach
-                            </div>
-                        </div>
+                        <x-attendances :user="auth()->user()"></x-attendances>
                     </div>
                 </div>
+                @else
+                    @foreach (auth()->user()->students as $user)
+                        <div class="card">
+                            <div class="card-header">
+                                Attendances and Grades Report of {{$user->name}}
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <x-grades :user="$user"></x-grades>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <x-attendances :user="$user"></x-attendances>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 @endif
             </x-card>
         </div>
