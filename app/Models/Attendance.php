@@ -39,4 +39,9 @@ class Attendance extends Model
             Mail::to($parent->email)->send(new AbsentReport($parent, $student));
         }
     }
+
+    public function absents()
+    {
+        return $this->hasMany(Absent::class);
+    }
 }

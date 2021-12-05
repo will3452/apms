@@ -2,37 +2,28 @@
 
 namespace App\Nova;
 
-use App\Models\Role;
+use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Attendance extends Resource
+class Absent extends Resource
 {
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        if (!auth()->user()->hasRole(Role::SUPERADMIN)) {
-            return $query->where('teacher_id', auth()->id());
-        }
-        return $query;
-    }
+    public static $displayInNavition = false;
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Attendance::class;
+    public static $model = \App\Models\Absent::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'created_at';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -41,6 +32,8 @@ class Attendance extends Resource
      */
     public static $search = [
         'created_at',
+        'user_id',
+        'attendance_id',
     ];
 
     /**
@@ -52,27 +45,13 @@ class Attendance extends Resource
     public function fields(Request $request)
     {
         return [
-
-            BelongsTo::make('Teacher')
+            Date::make('Date', 'created_at')
                 ->exceptOnForms()
-                ->onlyOnDetail()
-                ->searchable()
-                ->required(),
+                ->sortable(),
 
-            BelongsTo::make('Subject')
-                ->searchable()
-                ->required(),
+            BelongsTo::make('Student', 'student', Student::class),
 
-            Text::make('Date And Time', function ($request) {
-                return $request->created_at->format('m/y/d - h:i A');
-            })
-                ->exceptOnForms(),
-
-            BelongsToMany::make('Present Students', 'users'),
-
-            HasMany::make('Absent Students', 'absents', Absent::class),
-
-
+            BelongsTo::make('Attendance', 'attendance', Attendance::class),
         ];
     }
 
@@ -119,6 +98,4 @@ class Attendance extends Resource
     {
         return [];
     }
-
-    public static $group = "Data Management";
 }
