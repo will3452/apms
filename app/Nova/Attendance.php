@@ -68,7 +68,7 @@ class Attendance extends Resource
             })
                 ->exceptOnForms(),
 
-            BelongsToMany::make('Present Students', 'users'),
+            BelongsToMany::make('Present Students', 'users', Student::class),
 
             HasMany::make('Absent Students', 'absents', Absent::class),
 

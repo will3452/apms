@@ -6,7 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class SeedSuperadmin extends Migration
 {
-
     public function up()
     {
         $user = User::where('email', 'superadmin@apms.com')->first();
@@ -25,7 +24,5 @@ class SeedSuperadmin extends Migration
         }
 
         $user->assignRole($role);
-
     }
-
 }
