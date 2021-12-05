@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class AbsentObserver
 {
-    public function creted(Absent $absent)
+    public function created(Absent $absent)
     {
         Mail::to($absent->student->guardian->email)->send(new AbsentReport($absent->student->guardian, $absent->student));
     }
