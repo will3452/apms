@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Absent;
 use App\Models\Attendance;
 use App\Models\Fee;
 use App\Models\Grade;
@@ -10,6 +11,7 @@ use App\Models\Message;
 use App\Models\Schedule;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Observers\AbsentObserver;
 use App\Observers\AttendanceObserver;
 use App\Observers\FeeObserver;
 use App\Observers\GradeObserver;
@@ -51,6 +53,6 @@ class EventServiceProvider extends ServiceProvider
         Schedule::observe(ScheduleObserver::class);
         Fee::observe(FeeObserver::class);
         Message::observe(MessageObserver::class);
-
+        Absent::observe(AbsentObserver::class);
     }
 }

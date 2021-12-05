@@ -71,8 +71,6 @@ class Attendance extends Resource
             BelongsToMany::make('Present Students', 'users', Student::class),
 
             HasMany::make('Absent Students', 'absents', Absent::class),
-
-
         ];
     }
 
